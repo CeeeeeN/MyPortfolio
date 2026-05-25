@@ -1,0 +1,109 @@
+@import "tailwindcss";
+
+@theme {
+  /* Brand Colors */
+  --color-bg: oklch(10% 0.01 260);
+  --color-surface: oklch(14% 0.015 260);
+  --color-fg: oklch(90% 0.01 260);
+  --color-muted: oklch(50% 0.02 260);
+  --color-border: oklch(25% 0.03 260);
+  --color-accent: oklch(85% 0.22 95);      /* Cyberpunk Yellow */
+  --color-secondary: oklch(75% 0.18 210);  /* Electric Cyan */
+  --color-tertiary: oklch(70% 0.25 140);   /* Hacking Green */
+  --color-danger: oklch(60% 0.25 20);      /* Arasaka Red */
+
+  /* Typography */
+  --font-display: "JetBrains Mono", ui-monospace, monospace;
+  --font-body: "Inter", -apple-system, system-ui, sans-serif;
+  --font-cyber: "Cyber", "Impact", "Arial Black";
+}
+
+@layer base {
+  body {
+    background-color: var(--color-bg);
+    color: var(--color-fg);
+    font-family: var(--font-body);
+    line-height: 1.6;
+    overflow-x: hidden;
+    scroll-behavior: smooth;
+    
+    /* Subtle background grid */
+    background-image: 
+      linear-gradient(var(--color-border) 1px, transparent 1px),
+      linear-gradient(90deg, var(--color-border) 1px, transparent 1px);
+    background-size: 150px 150px;
+  }
+
+  /* Scanline effect */
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 100;
+    background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.02) 50%);
+    background-size: 100% 4px;
+    opacity: 0.5;
+  }
+}
+
+@layer utilities {
+  .clip-btn {
+    clip-path: polygon(10% 0, 100% 0, 100% 70%, 90% 100%, 0 100%, 0 30%);
+  }
+  .clip-card {
+    clip-path: polygon(0 0, 95% 0, 100% 5%, 100% 100%, 5% 100%, 0 95%);
+  }
+  .clip-send {
+    clip-path: polygon(0 0, 90% 0, 100% 30%, 100% 100%, 10% 100%, 0 70%);
+  }
+  .clip-category {
+    clip-path: polygon(0 0, 100% 0, 100% 90%, 90% 100%, 0 100%);
+  }
+  .clip-nav {
+    clip-path: polygon(0 0, 100% 0, 100% 70%, 98% 100%, 0 100%);
+  }
+  
+  /* Glitch Text Effect */
+  .glitch {
+    position: relative;
+  }
+  .glitch::before, .glitch::after {
+    content: attr(data-text);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+  .glitch::before {
+    left: 2px;
+    text-shadow: -2px 0 var(--color-secondary);
+    clip: rect(44px, 999px, 56px, 0);
+    animation: glitch-anim 5s infinite linear alternate-reverse;
+  }
+  .glitch::after {
+    left: -2px;
+    text-shadow: -2px 0 var(--color-danger);
+    clip: rect(44px, 999px, 56px, 0);
+    animation: glitch-anim2 5s infinite linear alternate-reverse;
+  }
+}
+
+@keyframes glitch-anim {
+  0% { clip: rect(31px, 9999px, 94px, 0); }
+  20% { clip: rect(62px, 9999px, 42px, 0); }
+  40% { clip: rect(16px, 9999px, 78px, 0); }
+  60% { clip: rect(93px, 9999px, 11px, 0); }
+  80% { clip: rect(54px, 9999px, 33px, 0); }
+  100% { clip: rect(2px, 9999px, 86px, 0); }
+}
+
+@keyframes glitch-anim2 {
+  0% { clip: rect(85px, 9999px, 12px, 0); }
+  20% { clip: rect(4px, 9999px, 98px, 0); }
+  40% { clip: rect(33px, 9999px, 67px, 0); }
+  60% { clip: rect(12px, 9999px, 45px, 0); }
+  80% { clip: rect(78px, 9999px, 23px, 0); }
+  100% { clip: rect(56px, 9999px, 89px, 0); }
+}
