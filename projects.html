@@ -1,0 +1,500 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>MISSIONS | Operative Portfolio</title>
+  <style>
+    :root {
+      --bg: oklch(12% 0.01 260);
+      --surface: oklch(18% 0.02 260);
+      --fg: oklch(95% 0.01 260);
+      --muted: oklch(60% 0.02 260);
+      --border: oklch(35% 0.05 260);
+      --accent: oklch(85% 0.22 95);      /* Yellow */
+      --secondary: oklch(75% 0.18 210);   /* Cyan */
+      --tertiary: oklch(70% 0.25 140);    /* Green */
+      --danger: oklch(60% 0.25 20);      /* Red */
+      --font-display: "JetBrains Mono", ui-monospace, monospace;
+      --font-body: "Inter", -apple-system, system-ui, sans-serif;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    body {
+      background: var(--bg);
+      color: var(--fg);
+      font-family: var(--font-body);
+      min-height: 100vh;
+      overflow-x: hidden;
+      background-image: 
+        linear-gradient(var(--border) 1px, transparent 1px),
+        linear-gradient(90deg, var(--border) 1px, transparent 1px);
+      background-size: 100px 100px;
+    }
+
+    /* Scanline effect */
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.05) 50%);
+      background-size: 100% 4px;
+      pointer-events: none;
+      z-index: 100;
+    }
+
+    .hud-nav {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      padding: 1.5rem 3rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(13, 13, 13, 0.9);
+      backdrop-filter: blur(10px);
+      border-bottom: 3px solid var(--accent);
+      z-index: 1000;
+      font-family: var(--font-display);
+      clip-path: polygon(0 0, 100% 0, 100% 70%, 98% 100%, 0 100%);
+    }
+
+    .hud-nav .logo {
+      color: var(--accent);
+      font-weight: 900;
+      letter-spacing: -1px;
+    }
+
+    .hud-nav .links a {
+      color: var(--fg);
+      text-decoration: none;
+      margin-left: 2.5rem;
+      font-size: 0.85rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      position: relative;
+    }
+
+    .hud-nav .links a.active {
+      color: var(--tertiary);
+    }
+
+    .container {
+      max-width: 1300px;
+      margin: 0 auto;
+      padding: 150px 3rem 5rem;
+    }
+
+    header {
+      margin-bottom: 4rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 1rem;
+    }
+
+    header h1 {
+      font-family: var(--font-display);
+      font-size: 4rem;
+      color: var(--accent);
+      text-transform: uppercase;
+      line-height: 0.8;
+      font-weight: 900;
+    }
+
+    .mission-stats {
+      font-family: var(--font-display);
+      font-size: 0.7rem;
+      color: var(--tertiary);
+      text-align: right;
+    }
+
+    .mission-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+      gap: 3rem;
+    }
+
+    .mission-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      cursor: pointer;
+      transition: all 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+      clip-path: polygon(0 0, 95% 0, 100% 5%, 100% 100%, 5% 100%, 0 95%);
+    }
+
+    .mission-card:hover {
+      border-color: var(--tertiary);
+      transform: translateY(-10px);
+      box-shadow: 0 10px 40px rgba(0, 255, 65, 0.1);
+    }
+
+    .mission-image {
+      height: 250px;
+      background-size: cover;
+      background-position: center;
+      position: relative;
+      filter: grayscale(1) brightness(0.8) contrast(1.2);
+      transition: all 0.4s;
+    }
+
+    .mission-card:hover .mission-image {
+      filter: grayscale(0) brightness(1) contrast(1);
+    }
+
+    .mission-image::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(transparent, var(--surface));
+    }
+
+    .mission-overlay {
+      position: absolute;
+      top: 1rem;
+      left: 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      z-index: 2;
+    }
+
+    .badge {
+      font-family: var(--font-display);
+      font-size: 0.6rem;
+      padding: 0.2rem 0.5rem;
+      text-transform: uppercase;
+      font-weight: 900;
+      width: fit-content;
+    }
+
+    .badge-type { background: var(--bg); color: var(--fg); border: 1px solid var(--border); }
+    .badge-status { background: var(--tertiary); color: var(--bg); }
+
+    .mission-content {
+      padding: 2rem;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .mission-id {
+      font-family: var(--font-display);
+      font-size: 0.6rem;
+      color: var(--muted);
+      margin-bottom: 0.5rem;
+    }
+
+    .mission-title {
+      font-family: var(--font-display);
+      font-size: 1.5rem;
+      color: var(--accent);
+      text-transform: uppercase;
+      font-weight: 900;
+      margin-bottom: 1rem;
+    }
+
+    .mission-desc {
+      font-size: 0.9rem;
+      color: var(--muted);
+      line-height: 1.6;
+      margin-bottom: 2rem;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .mission-tech {
+      margin-top: auto;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .tech-tag {
+      font-family: var(--font-display);
+      font-size: 0.65rem;
+      color: var(--secondary);
+      border: 1px solid rgba(0, 240, 255, 0.2);
+      padding: 0.2rem 0.6rem;
+      background: rgba(0, 240, 255, 0.05);
+    }
+
+    /* Modal Styling */
+    .mission-modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.95);
+      z-index: 2000;
+      display: none;
+      justify-content: center;
+      align-items: center;
+      padding: 2rem;
+    }
+
+    .mission-modal.active { display: flex; }
+
+    .modal-box {
+      background: var(--bg);
+      border: 2px solid var(--tertiary);
+      max-width: 900px;
+      width: 100%;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      max-height: 90vh;
+      overflow: hidden;
+      clip-path: polygon(0 0, 95% 0, 100% 5%, 100% 100%, 5% 100%, 0 95%);
+    }
+
+    .modal-img {
+      height: 400px;
+      background-size: cover;
+      background-position: center;
+      border-bottom: 2px solid var(--tertiary);
+    }
+
+    .modal-body {
+      padding: 3rem;
+      overflow-y: auto;
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 1.5rem;
+      right: 2rem;
+      color: var(--danger);
+      font-family: var(--font-display);
+      font-size: 0.8rem;
+      cursor: pointer;
+      z-index: 10;
+    }
+
+    .modal-title {
+      font-family: var(--font-display);
+      color: var(--accent);
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+      text-transform: uppercase;
+    }
+
+    .modal-details {
+      color: var(--fg);
+      line-height: 1.8;
+      font-size: 1rem;
+    }
+
+    .objective-list {
+      margin-top: 2rem;
+      list-style: none;
+    }
+
+    .objective-item {
+      padding: 0.8rem;
+      border: 1px solid var(--border);
+      margin-bottom: 0.5rem;
+      font-family: var(--font-display);
+      font-size: 0.8rem;
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+    }
+
+    .objective-item::before {
+      content: '[ OK ]';
+      color: var(--tertiary);
+    }
+
+  </style>
+</head>
+<body>
+
+  <nav class="hud-nav">
+    <div class="logo">OPERATIVE_P1 // <span style="color:var(--accent)">ACTIVE</span></div>
+    <div class="links">
+      <a href="index.html">UPLINK</a>
+      <a href="skills.html">CYBERDECK</a>
+      <a href="projects.html" class="active">MISSIONS</a>
+    </div>
+  </nav>
+
+  <div class="container">
+    <header>
+      <div class="header-main">
+        <h1>MISSION_BOARD</h1>
+        <div style="font-family:var(--font-display); font-size: 0.7rem; color: var(--muted); margin-top: 0.5rem;">AUTHORIZED_ACCESS_ONLY // NIGHT_CITY_NET</div>
+      </div>
+      <div class="mission-stats">
+        <div>TOTAL_MISSIONS: 24</div>
+        <div>SUCCESS_RATE: 98.2%</div>
+        <div>REPUTATION: LEGENDARY</div>
+      </div>
+    </header>
+
+    <div class="mission-grid">
+      
+      <!-- Mission 1: Engine -->
+      <div class="mission-card" onclick="openMission('nebula')">
+        <div class="mission-image" style="background-image: url('https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&q=80&w=800')"></div>
+        <div class="mission-overlay">
+          <div class="badge badge-type">CORE_ENGINE</div>
+          <div class="badge badge-status">COMPLETED</div>
+        </div>
+        <div class="mission-content">
+          <div class="mission-id">CID: 882-XJ // 2025</div>
+          <h3 class="mission-title">NEBULA_ENGINE</h3>
+          <p class="mission-desc">High-performance 2D rendering engine optimized for WebGL simulations. Implemented custom ECS and spatial partitioning for extreme entity density.</p>
+          <div class="mission-tech">
+            <span class="tech-tag">C++ / WASM</span>
+            <span class="tech-tag">WEBGL_2.0</span>
+            <span class="tech-tag">GLSL</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Mission 2: SaaS -->
+      <div class="mission-card" onclick="openMission('saas')">
+        <div class="mission-image" style="background-image: url('https://images.unsplash.com/photo-1558494949-ef010cbdcc51?auto=format&fit=crop&q=80&w=800')"></div>
+        <div class="mission-overlay">
+          <div class="badge badge-type">DIST_SYS</div>
+          <div class="badge badge-status">COMPLETED</div>
+        </div>
+        <div class="mission-content">
+          <div class="mission-id">CID: 412-MK // 2024</div>
+          <h3 class="mission-title">GLOBAL_SCALE_RAID</h3>
+          <p class="mission-desc">Re-architecting legacy monolithic structures into resilient microservices. Optimized for multi-region redundancy and sub-100ms latency.</p>
+          <div class="mission-tech">
+            <span class="tech-tag">GOLANG</span>
+            <span class="tech-tag">KUBERNETES</span>
+            <span class="tech-tag">AWS</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Mission 3: HyperFrame -->
+      <div class="mission-card" onclick="openMission('hyperframe')">
+        <div class="mission-image" style="background-image: url('https://images.unsplash.com/photo-1535223289827-42f1e9919769?auto=format&fit=crop&q=80&w=800')"></div>
+        <div class="mission-overlay">
+          <div class="badge badge-type">IF_SYNTH</div>
+          <div class="badge badge-status" style="background:var(--secondary)">ACTIVE</div>
+        </div>
+        <div class="mission-content">
+          <div class="mission-id">CID: 001-HF // 2026</div>
+          <h3 class="mission-title">HYPERFRAME_PROTO</h3>
+          <p class="mission-desc">Next-generation multi-viewport orchestration framework. Synthesizing real-time data streams into interactive holographic HUDs.</p>
+          <div class="mission-tech">
+            <span class="tech-tag">REACT_NEXT</span>
+            <span class="tech-tag">THREE_JS</span>
+            <span class="tech-tag">WEB_RTC</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Mission 4: Data Heist -->
+      <div class="mission-card" onclick="openMission('atlas')">
+        <div class="mission-image" style="background-image: url('https://images.unsplash.com/photo-1563986768609-322da13575f3?auto=format&fit=crop&q=80&w=800')"></div>
+        <div class="mission-overlay">
+          <div class="badge badge-type">DATA_OPS</div>
+          <div class="badge badge-status">COMPLETED</div>
+        </div>
+        <div class="mission-content">
+          <div class="mission-id">CID: 990-AD // 2023</div>
+          <h3 class="mission-title">ATLAS_VAULT_HEIST</h3>
+          <p class="mission-desc">Strategic optimization of high-frequency trading data clusters. Secured 65% performance gain through neural indexing strategies.</p>
+          <div class="mission-tech">
+            <span class="tech-tag">MONGODB</span>
+            <span class="tech-tag">REDIS</span>
+            <span class="tech-tag">PY_DATA</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="mission-modal" id="modal">
+    <div class="modal-box">
+      <div class="modal-close" onclick="closeMission()">[ ABORT_X ]</div>
+      <div class="modal-img" id="m-img"></div>
+      <div class="modal-body">
+        <h2 class="modal-title" id="m-title">MISSION_TITLE</h2>
+        <div class="modal-details" id="m-details">
+          Decrypting mission logs...
+        </div>
+        <div style="margin-top: 3rem;">
+          <h4 style="font-family:var(--font-display); color:var(--tertiary); font-size: 0.8rem; margin-bottom: 1rem;">MISSION_OBJECTIVES</h4>
+          <ul class="objective-list" id="m-objectives">
+            <!-- populated by js -->
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const modal = document.getElementById('modal');
+    const mTitle = document.getElementById('m-title');
+    const mImg = document.getElementById('m-img');
+    const mDetails = document.getElementById('m-details');
+    const mObjs = document.getElementById('m-objectives');
+
+    const missionData = {
+      nebula: {
+        title: 'NEBULA_ENGINE_v4',
+        img: 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&q=80&w=1200',
+        details: 'The Nebula Engine mission involved a total overhaul of legacy rendering architectures. By synthesizing high-performance WASM modules with WebGL 2.0, we achieved 10k+ active entities at a locked 60FPS.',
+        objectives: ['Implement Batched Rendering', 'Spatial Partitioning v2', 'Custom GLSL Pipeline', 'WASM Core Migration']
+      },
+      saas: {
+        title: 'GLOBAL_SCALE_RAID',
+        img: 'https://images.unsplash.com/photo-1558494949-ef010cbdcc51?auto=format&fit=crop&q=80&w=1200',
+        details: 'A high-stakes re-architecture of a global commerce platform. The goal was to eliminate single points of failure while maintaining high transaction throughput across 12 global regions.',
+        objectives: ['Microservices Migration', 'Zero-Downtime Cutover', 'Multi-Region K8s Mesh', 'Load Balancing Opt']
+      },
+      hyperframe: {
+        title: 'HYPERFRAME_PROTO',
+        img: 'https://images.unsplash.com/photo-1535223289827-42f1e9919769?auto=format&fit=crop&q=80&w=1200',
+        details: 'Still in progress. Developing a neural interface for data visualization. Using Three.js and custom shaders to project real-time system metrics into a 3D orbital HUD.',
+        objectives: ['Neural Sync Protocol', 'Real-time Data Streams', '3D UI Synthesis', 'Low Latency P2P']
+      },
+      atlas: {
+        title: 'ATLAS_VAULT_HEIST',
+        img: 'https://images.unsplash.com/photo-1563986768609-322da13575f3?auto=format&fit=crop&q=80&w=1200',
+        details: 'Optimization mission focused on the Atlas database vault. By implementing advanced neural indexing and redis caching layers, we secured critical data access speeds for high-freq trading.',
+        objectives: ['Indexing Optimization', 'Redis Layer Integration', 'Query Latency Reduction', 'Security Hardening']
+      }
+    };
+
+    function openMission(id) {
+      const data = missionData[id];
+      if(!data) return;
+      
+      mTitle.innerText = data.title;
+      mImg.style.backgroundImage = `url('${data.img}')`;
+      mDetails.innerText = data.details;
+      
+      mObjs.innerHTML = '';
+      data.objectives.forEach(obj => {
+        const li = document.createElement('li');
+        li.className = 'objective-item';
+        li.innerText = obj;
+        mObjs.appendChild(li);
+      });
+      
+      modal.classList.add('active');
+    }
+
+    function closeMission() { modal.classList.remove('active'); }
+
+    window.onclick = (e) => { if(e.target === modal) closeMission(); };
+
+  </script>
+</body>
+</html>
