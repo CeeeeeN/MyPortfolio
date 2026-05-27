@@ -6,6 +6,7 @@ import Skills from './components/Skills';
 import Projects from './components/Projects';
 import Terminal from './components/Terminal';
 import Footer from './components/Footer';
+import About from './components/About';
 import MissionModal from './components/MissionModal';
 
 export default function App() {
@@ -15,7 +16,7 @@ export default function App() {
   // Scroll Spy Logic for the Stepper Nav
   useEffect(() => {
     const handleScroll = () => {
-      const sections = ['hero', 'skills', 'projects', 'contact'];
+      const sections = ['hero', 'about', 'skills', 'projects', 'contact'];
       let current = '';
       sections.forEach(id => {
         const section = document.getElementById(id);
@@ -36,6 +37,7 @@ export default function App() {
 
       <main>
         <Hero />
+        <About />
         <Skills />
         <Projects setActiveMission={setActiveMission} />
         <Terminal />
