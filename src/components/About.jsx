@@ -1,4 +1,5 @@
 import React from 'react';
+import PFP from '../assets/PFP.png';
 
 // Sub-component for the monospaced command output.
 const LogParagraph = ({ children }) => (
@@ -57,12 +58,12 @@ export default function About() {
         {/* Left Column: OperatorProfile Card */}
         <div className="bg-surface border border-border p-8 rounded-lg shadow-[0_0_15px_rgba(0,255,65,0.05)] flex flex-col items-center justify-center">
           <div className="relative w-48 h-48 mb-10 flex items-center justify-center rounded-full border-2 border-border shadow-[0_0_20px_rgba(0,240,255,0.15)] bg-[#0a0a0a]">
-            {/* Default Avatar Silhouette */}
-            <svg className="w-24 h-24 text-muted" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-              <circle cx="12" cy="7" r="4" />
-            </svg>
-            <div className="absolute bottom-4 right-4 w-4 h-4 bg-tertiary rounded-full shadow-[0_0_10px_var(--color-tertiary)]" />
+            <img 
+              src={PFP} 
+              alt="Chaelsy Benj Jumawan" 
+              className="w-full h-full object-cover rounded-full"
+            />
+            
           </div>
 
           <div className="space-y-6 w-full max-w-[380px] text-sm">
@@ -143,7 +144,7 @@ export default function About() {
             {educationData.map((item, index) => (
               <div key={index} className="relative pl-8 group">
                 {/* Timeline Dot */}
-                <div className="absolute w-3.5 h-3.5 bg-bg border-2 border-tertiary rounded-full -left-[9px] top-1.5 shadow-[0_0_10px_var(--color-tertiary)] group-hover:scale-125 transition-transform duration-300"></div>
+                <div className="absolute w-3.5 h-3.5 bg-bg border-2 border-tertiary rounded-full -left-[8px] top-0.5 shadow-[0_0_10px_var(--color-tertiary)] group-hover:scale-125 transition-transform duration-300"></div>
                 
                 <div className="font-display text-[0.75rem] text-tertiary mb-1.5 tracking-widest">{item.year}</div>
                 <div className="font-display text-accent text-lg mb-2 leading-tight">{item.school}</div>
