@@ -1,7 +1,0 @@
-- [x] 1. Initialize `DESIGN.md` with shared CSS tokens and layout constants
-- [x] 2. Create `index.html`: Professional intro + Hub + Retro Terminal Contact
-- [x] 3. Create `skills.html`: Interactive SVG-based Skill Tree
-- [x] 4. Create `projects.html`: Level Map / Quest Log for experience
-- [x] 5. Add shared "HUD" navigation across all screens
-- [x] 6. Self-check against "Product Realism" and "CJX-ready UX" rules
-- [x] 7. Final 5-dim critique and emission
