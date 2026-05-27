@@ -2,11 +2,12 @@
 
 @theme {
   /* Brand Colors */
-  --color-bg: oklch(10% 0.01 260);
+  --color-bg: oklch(0.1255 0.01 260);
   --color-surface: oklch(14% 0.015 260);
   --color-fg: oklch(90% 0.01 260);
   --color-muted: oklch(50% 0.02 260);
   --color-border: oklch(25% 0.03 260);
+  --color-grid: oklch(15% 0.03 260);
   --color-accent: oklch(85% 0.22 95);      /* Cyberpunk Yellow */
   --color-secondary: oklch(75% 0.18 210);  /* Electric Cyan */
   --color-tertiary: oklch(70% 0.25 140);   /* Hacking Green */
@@ -29,8 +30,8 @@
     
     /* Subtle background grid */
     background-image: 
-      linear-gradient(var(--color-border) 1px, transparent 1px),
-      linear-gradient(90deg, var(--color-border) 1px, transparent 1px);
+      linear-gradient(var(--color-grid) 1px, transparent 1px),
+      linear-gradient(90deg, var(--color-grid) 1px, transparent 1px);
     background-size: 150px 150px;
   }
 
