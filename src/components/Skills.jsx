@@ -31,7 +31,7 @@ export default function Skills() {
   ];
 
   return (
-    <section id="skills" className="min-h-screen pt-32 pb-16 flex flex-col justify-center border-b border-border">
+    <section id="skills" className="min-h-screen px-4 sm:px-8 md:px-[10%] pt-32 pb-16 flex flex-col justify-center border-b border-border">
       
       <div className="mb-8 border-l-4 border-tertiary pl-8 mx-[10%]">
         <h2 className="font-display text-5xl font-black uppercase text-fg">TECH_SKILLS</h2>

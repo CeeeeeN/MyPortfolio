@@ -2,7 +2,7 @@ import { missionData } from '../services/PortfolioData';
 
 export default function Projects({ setActiveMission }) {
   return (
-    <section id="projects" className="min-h-screen pt-32 pb-16 px-[10%] flex flex-col justify-center border-b border-border">
+    <section id="projects" className="min-h-screen pt-32 pb-16 px-4 sm:px-8 md:px-[10%] flex flex-col justify-center border-b border-border">
       <div className="mb-16 border-l-4 border-tertiary pl-8">
         <h2 className="font-display text-5xl font-black uppercase text-fg">PROJECT_BOARD</h2>
         <div className="font-display text-xs text-tertiary mt-2">SCHOOL_PROJECTS // PERSONAL_PROJECTS</div>

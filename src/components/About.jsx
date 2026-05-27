@@ -44,7 +44,7 @@ export default function About() {
   ];
 
   return (
-    <section id="about" className="min-h-screen pt-32 pb-16 px-[10%] flex flex-col justify-center border-b border-border">
+    <section id="about" className="min-h-screen pt-32 pb-16 px-4 sm:px-8 md:px-[10%] flex flex-col justify-center border-b border-border">
       
       {/* SECTION HEADER */}
       <div className="mb-16 border-l-4 border-tertiary pl-8">

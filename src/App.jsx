@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import NavBar from './components/NavBar';
 import StepperNav from './components/StepperNav';
+import MobileNav from './components/MobileNav';
 import Hero from './components/Hero';
 import Skills from './components/Skills';
 import Projects from './components/Projects';
@@ -33,6 +34,7 @@ export default function App() {
   return (
     <div className="relative">
       <NavBar />
+      <MobileNav activeSection={activeSection} />
       <StepperNav activeSection={activeSection} />
 
       <main>
